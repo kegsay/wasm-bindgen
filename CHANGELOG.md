@@ -39,6 +39,9 @@
 * Add bindings for `FocusOptions`.
   [#3996](https://github.com/rustwasm/wasm-bindgen/pull/3996)
 
+* Update bindings for `IDBDatabase`.
+  [#4004](https://github.com/rustwasm/wasm-bindgen/pull/4004)
+
 * Add bindings for `RTCRtpReceiver.jitterBufferTarget`.
   [#3968](https://github.com/rustwasm/wasm-bindgen/pull/3968)
 
@@ -90,6 +93,10 @@
 
 * Fix MDN links to static interface methods.
   [#4010](https://github.com/rustwasm/wasm-bindgen/pull/4010)
+
+### Removed
+
+* Remove deprecated function `IDBDatabase.createMutableFile()` and attribute `IDBDatabase.storage`.
 
 --------------------------------------------------------------------------------
 

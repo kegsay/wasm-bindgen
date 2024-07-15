@@ -4,7 +4,7 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * The origin of this IDL file is
- * https://dvcs.w3.org/hg/IndexedDB/raw-file/tip/Overview.html#idl-def-IDBObjectStoreParameters
+ * https://w3c.github.io/IndexedDB/#database-interface
  *
  * Copyright © 2012 W3C® (MIT, ERCIM, Keio), All Rights Reserved. W3C
  * liability, trademark and document use rules apply.
@@ -12,33 +12,34 @@
 
 [Exposed=(Window,Worker)]
 interface IDBDatabase : EventTarget {
-    readonly    attribute DOMString          name;
-    readonly    attribute unsigned long long version;
+  readonly attribute DOMString name;
+  readonly attribute unsigned long long version;
+  readonly attribute DOMStringList objectStoreNames;
 
-    readonly    attribute DOMStringList      objectStoreNames;
+  [NewObject] IDBTransaction transaction((DOMString or sequence<DOMString>) storeNames,
+                                         optional IDBTransactionMode mode = "readonly",
+                                         optional IDBTransactionOptions options = {});
+  undefined close();
 
-    [Throws]
-    IDBObjectStore createObjectStore (DOMString name, optional IDBObjectStoreParameters optionalParameters = {});
+  [NewObject] IDBObjectStore createObjectStore(
+    DOMString name,
+    optional IDBObjectStoreParameters options = {});
+  undefined deleteObjectStore(DOMString name);
 
-    [Throws]
-    undefined           deleteObjectStore (DOMString name);
-
-    [Throws]
-    IDBTransaction transaction ((DOMString or sequence<DOMString>) storeNames,
-                                optional IDBTransactionMode mode = "readonly");
-
-    undefined           close ();
-
-                attribute EventHandler       onabort;
-                attribute EventHandler       onclose;
-                attribute EventHandler       onerror;
-                attribute EventHandler       onversionchange;
+  // Event handlers:
+  attribute EventHandler onabort;
+  attribute EventHandler onclose;
+  attribute EventHandler onerror;
+  attribute EventHandler onversionchange;
 };
 
-partial interface IDBDatabase {
-    [Func="mozilla::dom::IndexedDatabaseManager::ExperimentalFeaturesEnabled"]
-    readonly    attribute StorageType        storage;
+enum IDBTransactionDurability { "default", "strict", "relaxed" };
 
-    [Exposed=Window, Throws, Deprecated="IDBDatabaseCreateMutableFile"]
-    IDBRequest createMutableFile (DOMString name, optional DOMString type);
+dictionary IDBTransactionOptions {
+  IDBTransactionDurability durability = "default";
+};
+
+dictionary IDBObjectStoreParameters {
+  (DOMString or sequence<DOMString>)? keyPath = null;
+  boolean autoIncrement = false;
 };
